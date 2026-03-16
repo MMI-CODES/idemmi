@@ -1,0 +1,14 @@
+grant {
+  // Allow reading basic core properties
+  permission java.util.PropertyPermission "*", "read";
+  
+  // Allow reading and connecting to standard sockets if needed (optional)
+  // permission java.net.SocketPermission "*", "connect,resolve";
+  
+  // We explicitly deny executing external processes
+  // Ex: permission java.io.FilePermission "<<ALL FILES>>", "execute" IS NOT PRESENT
+
+  // File Read/Write: ONLY inside the specific temporary session folder structure
+  // This is replaced dynamically in index.js by the absolute path to the session folder
+  permission java.io.FilePermission "${SESSION_DIR}/-", "read,write,delete";
+};

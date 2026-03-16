@@ -1,0 +1,13 @@
+- [ ] Backend Execution Engine
+  - [ ] Initialize Express + Socket.IO server `server/index.js`
+  - [ ] Add temporary workspace allocation and cleanup logic
+  - [ ] Implement Java execution (`javac` & `java` spawn, stderr/stdout streaming)
+  - [ ] Implement Python execution (`python` spawn)
+  - [ ] Enforce security limits (timeout, output buffer limits)
+- [ ] Frontend Real-Time Console
+  - [ ] Install `socket.io-client`
+  - [ ] Add Run and Stop buttons to the UI Header
+  - [ ] Update Console to stream output with distinct colors for `stdout`, `stderr`, and `system`
+  - [ ] Add an input field to send `stdin` to the running process via WebSocket
+- [ ] Docker Integration
+  - [ ] Update `Dockerfile` to build Vite and serve via the Node backend on port 8080
