@@ -1,0 +1,243 @@
+:root {
+  --bg-dark: #1e1e1e;
+  --bg-sidebar: #252526;
+  --bg-console: #1e1e1e;
+  --fg-default: #cccccc;
+  --bg-active: #37373d;
+  --bg-hover: #2a2d2e;
+  --border-color: #333333;
+  --accent: #007acc;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: var(--fg-default);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  min-height: 0; /* Important for flex children to shrink */
+  overflow: hidden; /* Added to keep children contained during resize */
+}
+
+/* 
+  Explorer on the right
+  Editor in the center
+*/
+.editor-pane {
+  flex: 1;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0; /* Crucial: allows flex child to shrink horizontally below its content width */
+}
+
+.explorer-pane {
+  width: 250px;
+  flex-shrink: 0; /* Ensures the explorer never shrinks below 250px */
+  background-color: var(--bg-sidebar);
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.console-pane {
+  background-color: var(--bg-console);
+  border-top: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Resize Handle */
+.resize-handle-y {
+  height: 4px;
+  background-color: transparent;
+  cursor: row-resize;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  z-index: 10;
+}
+
+.resize-handle-y:hover, .resize-handle-y:active {
+  background-color: var(--accent);
+}
+
+.console-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 100; /* Force console above Monaco minimap/editor */
+  flex-shrink: 0; /* Prevent the console from being squished */
+  min-height: 40px; /* Bare minimum height so the handle is always grabable */
+}
+
+
+/* Typography and common elements */
+button {
+  background: transparent;
+  color: var(--fg-default);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 0; /* Strictly square */
+  transition: background-color 0.1s;
+}
+
+button:hover {
+  background-color: var(--bg-hover);
+}
+
+button.primary {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+button.primary:hover {
+  background-color: #0098ff;
+}
+
+input {
+  background-color: var(--bg-dark);
+  color: var(--fg-default);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 0;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+}
+
+/* Sidebar Specific */
+.explorer-header {
+  padding: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.file-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 5px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 0;
+}
+
+.file-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.file-item.active {
+  background-color: var(--bg-active);
+  color: #fff;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-btn {
+  border: none;
+  background: none;
+  color: #888;
+  padding: 2px;
+}
+
+.delete-btn:hover {
+  color: #ff5555;
+  background: none;
+}
+
+/* Console Specific */
+.console-header {
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  text-transform: uppercase;
+}
+
+.console-output {
+  padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+  font-size: 13px;
+  white-space: pre-wrap;
+  color: #cccccc;
+}
+
+/* Tabs */
+.editor-tabs {
+  display: flex;
+  background-color: var(--bg-sidebar);
+  height: 35px;
+}
+
+.editor-tab {
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-dark);
+  border-right: 1px solid var(--border-color);
+  font-size: 13px;
+  color: #fff;
+  border-top: 1px solid var(--accent);
+}
+
+.editor-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}

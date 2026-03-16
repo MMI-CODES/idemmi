@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  ide-mmi:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MAX_CONCURRENT_CLIENTS=60
+      - MAX_CONNECTED_CLIENTS=200
+      - CLIENT_IDLE_TIMEOUT_MS=1800000
+      - INACTIVITY_TIMEOUT_MS=30000
+      - ABSOLUTE_MAX_TIME_MS=120000
+      - MAX_COMPILE_TIME_MS=10000
+      - MAX_MEMORY_MB=128
+      - MAX_OUTPUT_SIZE_BYTES=2097152
+      - MAX_FILES_PER_SESSION=5
+      - MAX_FILE_SIZE_BYTES=102400
