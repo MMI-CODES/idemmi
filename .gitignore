@@ -5,6 +5,7 @@ temp/
 java-compiler/
 java-libs/
 python-runtime/
+jdk-*/
 
 # Environment Variables
 .env
