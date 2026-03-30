@@ -1,42 +1,30 @@
-# syntax=docker/dockerfile:1
-ARG NODE_VERSION=24.12.0
-FROM node:${NODE_VERSION}-alpine AS builder
-
-# Set production environment by default
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-
-# 1️⃣ Copy package files first for caching
-COPY package.json package-lock.json ./
-
-# 2️⃣ Copy prisma and nuxt config (needed for postinstall)
-COPY prisma ./prisma
-COPY nuxt.config.ts ./
-
-# 3️⃣ Install dependencies
-RUN npm ci --omit=dev
-
-# 4️⃣ Copy the rest of the source code
+# Build frontend
+FROM node:20 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
 COPY . .
-
-# 5️⃣ Build the app
 RUN npm run build
 
-# 6️⃣ Prepare production image
-FROM node:${NODE_VERSION}-alpine AS production
+# Production Server (Node without pre-installed language runtimes)
+FROM node:20
+WORKDIR /app
+COPY package*.json ./
 
-WORKDIR /usr/src/app
-ENV NODE_ENV=production
+# Install required system tools (unzip for setup scripts)
+RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
 
-# Copy only necessary files from builder
-COPY --from=builder /usr/src/app/.output ./
-COPY --from=builder /usr/src/app/package.json ./
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/prisma ./prisma
+# Install standard dependencies (includes scripts requirements)
+RUN npm install --production
 
-EXPOSE 3000
+# Copy build and server files
+COPY --from=build /app/dist /app/dist
+COPY server /app/server
+COPY scripts /app/scripts
 
-USER node
+EXPOSE 8080
+ENV PORT=8080
 
-# Run the app
-CMD ["node", ".output/server/index.mjs"]
+# Execute the setup scripts (download-jdk, download-python, download-java-libs)
+# at container runtime, then start the server.
+CMD ["sh", "-c", "npm run setup && npm start"]
